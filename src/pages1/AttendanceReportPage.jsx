@@ -19,7 +19,7 @@ function AttendanceReportPage() {
   useEffect(() => {
     setError(""); 
     axios
-      .get("http://localhost:5000/api/departments")
+      .get("https://attendanceproject-backend.onrender.com/api/departments")
       .then((response) => setDepartments(response.data))
       .catch((error) => {
         console.error(error);
@@ -34,7 +34,7 @@ function AttendanceReportPage() {
       setError(""); 
       axios
         .get(
-          `http://localhost:5000/api/sessions?departmentId=${selectedDepartment}`
+          `https://attendanceproject-backend.onrender.com/api/sessions?departmentId=${selectedDepartment}`
         )
         .then((response) => setSessions(response.data))
         .catch((error) => {
@@ -57,7 +57,7 @@ function AttendanceReportPage() {
     setError(""); 
     axios
       .get(
-        `http://localhost:5000/api/attendance/all-students?departmentId=${selectedDepartment}&sessionId=${selectedSession}&semesterNumber=${selectedSemester}`
+        `https://attendanceproject-backend.onrender.com/api/attendance/all-students?departmentId=${selectedDepartment}&sessionId=${selectedSession}&semesterNumber=${selectedSemester}`
       )
       .then((response) => {
         setAttendanceReports(response.data);

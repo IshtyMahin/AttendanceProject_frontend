@@ -37,7 +37,7 @@ function SetupPage() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/api/departments")
+      .get("https://attendanceproject-backend.onrender.com/api/departments")
       .then((response) => {
         setDepartments(response.data);
         setLoading(false);
@@ -56,7 +56,7 @@ function SetupPage() {
     if (deptId) {
       setLoading(true);
       axios
-        .get(`http://localhost:5000/api/sessions?departmentId=${deptId}`)
+        .get(`https://attendanceproject-backend.onrender.com/api/sessions?departmentId=${deptId}`)
         .then((response) => {
           setSessions(response.data);
           setLoading(false);
@@ -74,7 +74,7 @@ function SetupPage() {
       setLoading(true);
       axios
         .get(
-          `http://localhost:5000/api/courses?year=${newSession}&departmentId=${newDepartment}&semesterNumber=${newCourse.semester}`
+          `https://attendanceproject-backend.onrender.com/api/courses?year=${newSession}&departmentId=${newDepartment}&semesterNumber=${newCourse.semester}`
         )
         .then((response) => {
           setCourses(response.data);
@@ -91,7 +91,7 @@ function SetupPage() {
     setError("");
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/departments", {
+      await axios.post("https://attendanceproject-backend.onrender.com/api/departments", {
         name: newDepartment,
       });
       setAlert({ message: "Department added successfully!", type: "success" });
@@ -106,7 +106,7 @@ function SetupPage() {
     setError("");
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/sessions", {
+      await axios.post("https://attendanceproject-backend.onrender.com/api/sessions", {
         department: newDepartment,
         year: newSession,
       });
@@ -122,7 +122,7 @@ function SetupPage() {
     setError("");
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/courses", newCourse);
+      await axios.post("https://attendanceproject-backend.onrender.com/api/courses", newCourse);
       setAlert({ message: "Course added successfully!", type: "success" });
       setLoading(false);
     } catch {
@@ -135,7 +135,7 @@ function SetupPage() {
     setError("");
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/students", newStudent);
+      await axios.post("https://attendanceproject-backend.onrender.com/api/students", newStudent);
       setAlert({ message: "Student added successfully!", type: "success" });
       setLoading(false);
     } catch {

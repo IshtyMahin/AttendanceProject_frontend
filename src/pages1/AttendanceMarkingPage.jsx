@@ -28,7 +28,7 @@ function AttendanceMarkingPage() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/api/departments")
+      .get("https://attendanceproject-backend.onrender.com/api/departments")
       .then((response) => setDepartments(response.data))
       .catch(() => showAlert("error", "Failed to load departments!"))
       .finally(() => setLoading(false));
@@ -41,7 +41,7 @@ function AttendanceMarkingPage() {
       setLoading(true);
       axios
         .get(
-          `http://localhost:5000/api/sessions?departmentId=${selectedDepartment}`
+          `https://attendanceproject-backend.onrender.com/api/sessions?departmentId=${selectedDepartment}`
         )
         .then((response) => setSessions(response.data))
         .catch(() => showAlert("error", "Failed to load sessions!"))
@@ -56,7 +56,7 @@ function AttendanceMarkingPage() {
       setLoading(true);
       axios
         .get(
-          `http://localhost:5000/api/courses?year=${selectedSession}&departmentId=${selectedDepartment}&semesterNumber=${selectedSemester}`
+          `https://attendanceproject-backend.onrender.com/api/courses?year=${selectedSession}&departmentId=${selectedDepartment}&semesterNumber=${selectedSemester}`
         )
         .then((response) => setCourses(response.data))
         .catch(() => showAlert("error", "Failed to load courses!"))
@@ -73,7 +73,7 @@ function AttendanceMarkingPage() {
     setLoading(true);
     axios
       .get(
-        `http://localhost:5000/api/students?departmentId=${selectedDepartment}&sessionId=${selectedSession}`
+        `https://attendanceproject-backend.onrender.com/api/students?departmentId=${selectedDepartment}&sessionId=${selectedSession}`
       )
       .then((response) => setStudents(response.data))
       .catch(() => showAlert("error", "Failed to load students!"))
@@ -105,7 +105,7 @@ function AttendanceMarkingPage() {
 
     setLoading(true);
     axios
-      .post("http://localhost:5000/api/attendance", attendanceDataArray)
+      .post("https://attendanceproject-backend.onrender.com/api/attendance", attendanceDataArray)
       .then(() => {
         showAlert("success", "Attendance marked successfully!");
         setAttendanceData({});

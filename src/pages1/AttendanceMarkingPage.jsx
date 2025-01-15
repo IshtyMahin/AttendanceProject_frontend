@@ -167,7 +167,15 @@ function AttendanceMarkingPage() {
             ))}
           </select>
         </div>
+      </div>
+      <button
+        onClick={fetchStudents}
+        className="w-full bg-slate-800 text-white py-3  hover:bg-slate-900 rounded-lg font-medium  transition"
+      >
+        Fetch Students
+      </button>
 
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div>
           <label className="block text-lg font-medium mb-2 text-gray-700">
             Semester
@@ -204,13 +212,6 @@ function AttendanceMarkingPage() {
           </select>
         </div>
       </div>
-
-      <button
-        onClick={fetchStudents}
-        className="w-full bg-slate-800 text-white py-3  hover:bg-slate-900 rounded-lg font-medium  transition"
-      >
-        Fetch Students
-      </button>
 
       <div className="my-6">
         <label className="block text-lg font-medium mb-2 text-gray-700">

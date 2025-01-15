@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<AttendanceMarkingPage />} />
           <Route path="/attendance-report" element={<AttendanceReportPage />} />
-          {/* <Route path="/setup" element={<SetupPage />} /> */}
+          <Route path="/setup" element={<SetupPage />} />
         </Routes>
       </div>
     </Router>

@@ -170,7 +170,7 @@ function AttendanceMarkingPage() {
       </div>
       <button
         onClick={fetchStudents}
-        className="w-full bg-slate-800 text-white py-3  hover:bg-slate-900 rounded-lg font-medium  transition"
+        className="w-full mb-8 bg-slate-800 text-white py-3  hover:bg-slate-900 rounded-lg font-medium  transition"
       >
         Fetch Students
       </button>
@@ -211,18 +211,17 @@ function AttendanceMarkingPage() {
             ))}
           </select>
         </div>
-      </div>
-
-      <div className="my-6">
-        <label className="block text-lg font-medium mb-2 text-gray-700">
-          Attendance Date
-        </label>
-        <input
-          type="date"
-          value={attendanceDate}
-          onChange={(e) => setAttendanceDate(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-        />
+        <div className="">
+          <label className="block text-lg font-medium mb-2 text-gray-700">
+            Attendance Date
+          </label>
+          <input
+            type="date"
+            value={attendanceDate}
+            onChange={(e) => setAttendanceDate(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          />
+        </div>
       </div>
 
       <div className="mt-8">

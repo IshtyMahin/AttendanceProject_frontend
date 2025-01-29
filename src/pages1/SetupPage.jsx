@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import SecondNav from "../components/SecondNav";
-import ErrorMessage from "../components/ErrorMessage";
 import AddDepartmentForm from "../components/AddDepartmentForm";
 import AddSessionForm from "../components/AddSessionForm";
 import AddCourseForm from "../components/AddCourseForm";
@@ -13,7 +12,6 @@ function SetupPage() {
   const [departments, setDepartments] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [semesters] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
-  const [courses, setCourses] = useState([]);
   const [newDepartment, setNewDepartment] = useState("");
   const [newSession, setNewSession] = useState("");
   const [newCourse, setNewCourse] = useState({
@@ -31,8 +29,12 @@ function SetupPage() {
   });
   const [currentSection, setCurrentSection] = useState("addDepartment");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [alert, setAlert] = useState({ message: "", type: "" });
+
+  const showAlert = (type, message) => {
+    setAlert({ type, message });
+    setTimeout(() => setAlert({ type: "", message: "" }), 5000);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -43,103 +45,121 @@ function SetupPage() {
         setLoading(false);
       })
       .catch(() => {
-        setError("Error fetching departments. Please try again later.");
+        showAlert("error", "Unable to fetch departments. Please try again.");
         setLoading(false);
       });
   }, []);
 
   const handleDepartmentChange = (deptId) => {
-    setError("");
     setNewDepartment(deptId);
     setNewSession("");
     setSessions([]);
     if (deptId) {
       setLoading(true);
       axios
-        .get(`https://attendanceproject-backend.onrender.com/api/sessions?departmentId=${deptId}`)
+        .get(
+          `https://attendanceproject-backend.onrender.com/api/sessions?departmentId=${deptId}`
+        )
         .then((response) => {
           setSessions(response.data);
           setLoading(false);
         })
         .catch(() => {
-          setError("Error fetching sessions. Please try again later.");
-          setLoading(false);
-        });
-    }
-  };
-
-  const handleCourseFetch = () => {
-    setError("");
-    if (newDepartment && newSession && newCourse.semester) {
-      setLoading(true);
-      axios
-        .get(
-          `https://attendanceproject-backend.onrender.com/api/courses?year=${newSession}&departmentId=${newDepartment}&semesterNumber=${newCourse.semester}`
-        )
-        .then((response) => {
-          setCourses(response.data);
-          setLoading(false);
-        })
-        .catch(() => {
-          setError("Error fetching courses. Please try again later.");
+          showAlert("error", "Error loading sessions. Please try again.");
           setLoading(false);
         });
     }
   };
 
   const handleAddDepartment = async () => {
-    setError("");
+    if (!newDepartment.trim()) {
+      showAlert("error", "Department name cannot be empty.");
+      return;
+    }
     setLoading(true);
     try {
-      await axios.post("https://attendanceproject-backend.onrender.com/api/departments", {
-        name: newDepartment,
-      });
-      setAlert({ message: "Department added successfully!", type: "success" });
-      setLoading(false);
+      await axios.post(
+        "https://attendanceproject-backend.onrender.com/api/departments",
+        {
+          name: newDepartment,
+        }
+      );
+      showAlert("success", "Department added successfully!");
+      setNewDepartment("");
     } catch {
-      setError("Error adding department. Please try again later.");
+      showAlert("error", "Error adding department. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
 
   const handleAddSession = async () => {
-    setError("");
+    if (!newDepartment || !newSession.trim()) {
+      showAlert("error", "Both department and session are required.");
+      return;
+    }
     setLoading(true);
     try {
-      await axios.post("https://attendanceproject-backend.onrender.com/api/sessions", {
-        department: newDepartment,
-        year: newSession,
-      });
-      setAlert({ message: "Session added successfully!", type: "success" });
-      setLoading(false);
+      await axios.post(
+        "https://attendanceproject-backend.onrender.com/api/sessions",
+        {
+          department: newDepartment,
+          year: newSession,
+        }
+      );
+      showAlert("success", "Session added successfully!");
+      setNewSession("");
     } catch {
-      setError("Error adding session. Please try again later.");
+      showAlert("error", "Error adding session. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
 
   const handleAddCourse = async () => {
-    setError("");
+    const { name, code, department, session, semester } = newCourse;
+    if (!name || !code || !department || !session || !semester) {
+      showAlert("error", "All fields are required to add a course.");
+      return;
+    }
     setLoading(true);
     try {
-      await axios.post("https://attendanceproject-backend.onrender.com/api/courses", newCourse);
-      setAlert({ message: "Course added successfully!", type: "success" });
-      setLoading(false);
+      await axios.post(
+        "https://attendanceproject-backend.onrender.com/api/courses",
+        newCourse
+      );
+      showAlert("success", "Course added successfully!");
+      // setNewCourse({
+      //   name: "",
+      //   code: "",
+      //   department: "",
+      //   session: "",
+      //   semester: "",
+      // });
     } catch {
-      setError("Error adding course. Please try again later.");
+      showAlert("error", "Error adding course. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
 
   const handleAddStudent = async () => {
-    setError("");
+    const { studentId, name, department, session } = newStudent;
+    if (!studentId || !name || !department || !session) {
+      showAlert("error", "All fields are required to add a student.");
+      return;
+    }
     setLoading(true);
     try {
-      await axios.post("https://attendanceproject-backend.onrender.com/api/students", newStudent);
-      setAlert({ message: "Student added successfully!", type: "success" });
-      setLoading(false);
+      await axios.post(
+        "https://attendanceproject-backend.onrender.com/api/students",
+        newStudent
+      );
+      showAlert("success", "Student added successfully!");
+      // setNewStudent({ studentId: "", name: "", department: "", session: "" });
     } catch {
-      setError("Error adding student. Please try again later.");
+      showAlert("error", "Error adding student. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
@@ -152,7 +172,6 @@ function SetupPage() {
           <Loading />
         </div>
       )}
-      <ErrorMessage error={error} />
       {alert.message && (
         <Alert
           message={alert.message}
@@ -162,6 +181,7 @@ function SetupPage() {
       )}
       {currentSection === "addDepartment" && (
         <AddDepartmentForm
+          showAlert={showAlert}
           newDepartment={newDepartment}
           setNewDepartment={setNewDepartment}
           handleAddDepartment={handleAddDepartment}
@@ -169,6 +189,7 @@ function SetupPage() {
       )}
       {currentSection === "addSession" && (
         <AddSessionForm
+          showAlert={showAlert}
           departments={departments}
           newDepartment={newDepartment}
           newSession={newSession}
@@ -179,6 +200,7 @@ function SetupPage() {
       )}
       {currentSection === "addCourse" && (
         <AddCourseForm
+          showAlert={showAlert}
           departments={departments}
           sessions={sessions}
           semesters={semesters}
@@ -190,6 +212,7 @@ function SetupPage() {
       )}
       {currentSection === "addStudent" && (
         <AddStudentForm
+          showAlert={showAlert}
           departments={departments}
           sessions={sessions}
           newStudent={newStudent}

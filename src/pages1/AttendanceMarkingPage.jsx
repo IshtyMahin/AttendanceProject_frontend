@@ -22,7 +22,7 @@ function AttendanceMarkingPage() {
 
   const showAlert = (type, message) => {
     setAlert({ type, message });
-    setTimeout(() => setAlert({ type: "", message: "" }), 3000);
+    setTimeout(() => setAlert({ type: "", message: "" }), 5000);
   };
 
   useEffect(() => {
@@ -65,8 +65,12 @@ function AttendanceMarkingPage() {
   }, [selectedSession, selectedDepartment, selectedSemester]);
 
   const fetchStudents = () => {
+    setStudents([]);
     if (!selectedDepartment || !selectedSession) {
-      showAlert("error", "Please select department and session first!");
+      showAlert(
+        "error",
+        "Please select both the department and session to proceed."
+      );
       return;
     }
 
@@ -75,8 +79,23 @@ function AttendanceMarkingPage() {
       .get(
         `https://attendanceproject-backend.onrender.com/api/students?departmentId=${selectedDepartment}&sessionId=${selectedSession}`
       )
-      .then((response) => setStudents(response.data))
-      .catch(() => showAlert("error", "Failed to load students!"))
+      .then((response) => {
+        if (response.data.length === 0) {
+          showAlert(
+            "info",
+            "No students found for the selected department and session."
+          );
+        } else {
+          setStudents(response.data);
+          showAlert("success", "Student data loaded successfully.");
+        }
+      })
+      .catch(() =>
+        showAlert(
+          "error",
+          "Failed to fetch student data. Please try again later."
+        )
+      )
       .finally(() => setLoading(false));
   };
 
@@ -105,7 +124,10 @@ function AttendanceMarkingPage() {
 
     setLoading(true);
     axios
-      .post("https://attendanceproject-backend.onrender.com/api/attendance", attendanceDataArray)
+      .post(
+        "https://attendanceproject-backend.onrender.com/api/attendance",
+        attendanceDataArray
+      )
       .then(() => {
         showAlert("success", "Attendance marked successfully!");
         setAttendanceData({});
@@ -301,9 +323,12 @@ function AttendanceMarkingPage() {
 
       <button
         onClick={handleAttendanceSubmit}
-        className="w-full bg-slate-800 text-white py-3  hover:bg-slate-900 rounded-lg  mt-6"
+        disabled={loading}
+        className={`w-full bg-slate-800 text-white py-3 rounded-lg mt-6 transition ${
+          loading ? "bg-gray-500 cursor-not-allowed" : "hover:bg-slate-900"
+        }`}
       >
-        Submit Attendance
+        {loading ? "Submitting..." : "Submit Attendance"}{" "}
       </button>
     </div>
   );

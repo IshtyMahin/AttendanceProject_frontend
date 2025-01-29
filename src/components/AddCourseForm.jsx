@@ -9,7 +9,6 @@ function AddCourseForm({
 }) {
   return (
     <div className="mb-6">
-     
       <select
         value={newCourse.department}
         onChange={(e) => {
@@ -19,10 +18,10 @@ function AddCourseForm({
             department: deptId,
             session: "",
             semester: "",
-          }); 
-          handleDepartmentChange(deptId); 
+          });
+          handleDepartmentChange(deptId);
         }}
-        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
+        className=" mt-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
       >
         <option value="">Select Department</option>
         {departments.map((dept) => (
@@ -34,18 +33,16 @@ function AddCourseForm({
 
       {newCourse.department && (
         <>
-        
           <select
             value={newCourse.session}
-            onChange={
-              (e) =>
-                setNewCourse({
-                  ...newCourse,
-                  session: e.target.value,
-                  semester: "",
-                }) 
+            onChange={(e) =>
+              setNewCourse({
+                ...newCourse,
+                session: e.target.value,
+                semester: "",
+              })
             }
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
+            className="mt-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
           >
             <option value="">Select Session</option>
             {sessions.map((sess) => (
@@ -59,13 +56,12 @@ function AddCourseForm({
 
       {newCourse.session && (
         <>
-          
           <select
             value={newCourse.semester}
             onChange={(e) =>
               setNewCourse({ ...newCourse, semester: e.target.value })
             }
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
+            className="mt-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
           >
             <option value="">Select Semester</option>
             {semesters.map((sem) => (

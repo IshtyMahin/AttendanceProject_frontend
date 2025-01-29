@@ -5,7 +5,40 @@ function AddStudentForm({
   setNewStudent,
   handleAddStudent,
   handleDepartmentChange,
+  showAlert,
 }) {
+  const handleAddStudentWithValidation = () => {
+    const { department, session, studentId, name } = newStudent;
+
+    if (!department) {
+      showAlert("error", "Please select a department before adding a student.");
+      return;
+    }
+
+    if (!session) {
+      showAlert("error", "Please select a session before adding a student.");
+      return;
+    }
+
+    if (!studentId || studentId.trim() === "") {
+      showAlert(
+        "error",
+        "Student ID cannot be empty. Please provide a valid ID."
+      );
+      return;
+    }
+
+    if (!name || name.trim() === "") {
+      showAlert(
+        "error",
+        "Student name cannot be empty. Please provide a valid name."
+      );
+      return;
+    }
+
+    handleAddStudent();
+  };
+
   return (
     <div className="mb-6">
       <select
@@ -13,9 +46,9 @@ function AddStudentForm({
         onChange={(e) => {
           const deptId = e.target.value;
           setNewStudent({ ...newStudent, department: deptId });
-          handleDepartmentChange(deptId); 
+          handleDepartmentChange(deptId);
         }}
-        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
+        className="mt-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
       >
         <option value="">Select Department</option>
         {departments.map((dept) => (
@@ -32,7 +65,7 @@ function AddStudentForm({
             onChange={(e) =>
               setNewStudent({ ...newStudent, session: e.target.value })
             }
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
+            className="mt-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
           >
             <option value="">Select Session</option>
             {sessions.map((sess) => (
@@ -67,7 +100,7 @@ function AddStudentForm({
       />
 
       <button
-        onClick={handleAddStudent}
+        onClick={handleAddStudentWithValidation}
         className="w-full bg-slate-800 text-white p-3 mt-4 rounded-lg hover:bg-slate-900 focus:ring-2 focus:ring-slate-300 transition"
       >
         Add Student
